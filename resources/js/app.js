@@ -8,6 +8,17 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+import Vue from 'vue'
+import Vuetify from 'vuetify'
+import User from './Helpers/User'
+import AppStorage from './Helpers/AppStorage'
+ 
+Vue.use(Vuetify)
+
+window.User = User;
+window.AppStorage = AppStorage;
+window.EventBus = new Vue();
+
 
 /**
  * The following block of code may be used to automatically register your
@@ -20,14 +31,17 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-
+Vue.component('AppHome', require('./components/AppHome.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+console.log(User.loggedIn())
+import router from './Router/router.js'
+
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    router
 });

@@ -1,12 +1,24 @@
 <?php
 
 namespace App\Http\Controllers;
+ 
 
 use App\Model\Question;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+use App\Http\Resources\QuestionResource;
 
 class QuestionController extends Controller
 {
+    /**
+     * Create a new AuthController instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('JWT', ['only' => ['index','show']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,6 +26,7 @@ class QuestionController extends Controller
      */
     public function index()
     {
+        return QuestionResource::collection(Question::latest()->get());
         //
     }
 
@@ -35,6 +48,8 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
+        Question::create($request->all());   
+        return response('created', Response::HTTP_CREATED) ;    
         //
     }
 
@@ -46,6 +61,7 @@ class QuestionController extends Controller
      */
     public function show(Question $question)
     {
+        return new QuestionResource($question);
         //
     }
 
@@ -69,6 +85,8 @@ class QuestionController extends Controller
      */
     public function update(Request $request, Question $question)
     {
+        $question->update($request->all());
+        return response("Updated", Response::HTTP_ACCEPTED);
         //
     }
 
@@ -80,6 +98,9 @@ class QuestionController extends Controller
      */
     public function destroy(Question $question)
     {
+        $question->delete();
+        return response(null, Response::HTTP_NO_CONTENT);
+        
         //
     }
 }
